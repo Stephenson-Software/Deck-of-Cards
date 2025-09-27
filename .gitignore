@@ -5,7 +5,8 @@
 *.exe
 testing/testCard
 testing/testingDeck
-tests/test_*
+# Compiled test executables in build directory
+build/test_*
 build/
 *.cmake
 CMakeCache.txt

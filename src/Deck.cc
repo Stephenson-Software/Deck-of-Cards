@@ -3,7 +3,8 @@
 
 #include <cstdlib>
 #include <algorithm>
-#include <time.h>
+#include <ctime>
+#include <random>
 
 using namespace std;
 
@@ -37,8 +38,9 @@ void Deck::generate() {
 
 void Deck::shuffle() {
 	log("Shuffling Deck '" + name + "'");
-	srand(time(0));
-	random_shuffle(cards.begin(), cards.end());
+	static random_device rd;
+	static mt19937 gen(rd());
+	std::shuffle(cards.begin(), cards.end(), gen);
 }
 
 void Deck::sortInOrder() {

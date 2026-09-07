@@ -6,8 +6,7 @@
 using namespace std;
 
 // ctor
-Card::Card(int r, const char *s) : Card(r, string(s)) {
-}
+Card::Card(int r, const char *s) : Card(r, string(s)) {}
 
 Card::Card(int r, string s) {
 	

@@ -25,5 +25,9 @@ int main() {
 		cout << cards[i] << "\n";
 	}
 
+	// the const char* overload, which no other line here exercises
+	Card fromLiteral(1, "Hearts");
+	cout << fromLiteral << " (rank " << fromLiteral.getRank() << ")\n";
+
 	return 0;
 }

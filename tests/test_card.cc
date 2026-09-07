@@ -2,6 +2,8 @@
 #include "Card.h"
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
+#include <functional>
 
 TEST_CASE("Card construction", "[card]") {
     SECTION("Valid card creation with string suit") {
@@ -95,4 +97,20 @@ TEST_CASE("Card stream output", "[card]") {
     oss << card;
     
     REQUIRE(oss.str() == "Nine of Diamonds");
+}
+TEST_CASE("Card comparisons are callable on const cards", "[card][const]") {
+    // std::sort instantiates its comparator against `const Card&`. When the
+    // comparison operators were non-const, libc++ rejected Deck::sortInOrder
+    // while libstdc++ happened to accept it, so this only broke on macOS.
+    const Card lower(1, "Spades");
+    const Card higher(2, "Spades");
+
+    STATIC_REQUIRE(std::is_invocable_r_v<bool, std::less<>, const Card&, const Card&>);
+
+    REQUIRE(lower < higher);
+    REQUIRE_FALSE(lower == higher);
+
+    std::ostringstream out;
+    out << lower;
+    REQUIRE(out.str() == "Ace of Spades");
 }

@@ -21,8 +21,8 @@ class Card {
 	
 	// operators
 	Card& operator=(const Card &other);
-	bool operator==(const Card &other);
-	bool operator<(const Card &other);
+	bool operator==(const Card &other) const;
+	bool operator<(const Card &other) const;
 	
 	// methods
 	int getRank() const;
@@ -30,6 +30,6 @@ class Card {
 	std::string getName() const;
 };
 
-std::ostream& operator<<(std::ostream &out, Card &c);
+std::ostream& operator<<(std::ostream &out, const Card &c);
 
 #endif

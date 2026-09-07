@@ -1,0 +1,23 @@
+# Build artifacts
+*.o
+*.a
+*.so
+*.exe
+testing/testCard
+testing/testingDeck
+# Compiled test executables in build directory
+build/
+build_*/
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+/tmp/

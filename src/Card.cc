@@ -1,5 +1,8 @@
 #include "Card.h"
 
+#include <string>
+#include <stdexcept>
+
 using namespace std;
 
 // ctor
@@ -79,7 +82,7 @@ Card& Card::operator=(const Card &other) {
 	return *this;
 }
 
-bool Card::operator==(const Card &other) {
+bool Card::operator==(const Card &other) const {
 	if ((rank == other.getRank()) && (suit == other.getSuit()) && (name == other.getName())) {
 		return true;
 	} else {
@@ -87,7 +90,7 @@ bool Card::operator==(const Card &other) {
 	}
 }
 
-bool Card::operator<(const Card &other) {
+bool Card::operator<(const Card &other) const {
 	return (rank < other.getRank());
 }
 
@@ -104,7 +107,7 @@ string Card::getName() const {
 
 
 // non-methods
-ostream& operator<<(ostream &out, Card &c) {
+ostream& operator<<(ostream &out, const Card &c) {
 	out << c.getName();
 	return out;
 }

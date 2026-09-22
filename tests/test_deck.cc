@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include "Deck.h"
 #include <sstream>
+#include <stdexcept>
 
 TEST_CASE("Deck construction", "[deck]") {
     SECTION("Empty deck creation") {
@@ -139,4 +140,51 @@ TEST_CASE("Deck stream output", "[deck]") {
     oss.str("");  // Clear stream
     oss << emptyDeck;
     REQUIRE(oss.str().length() > 0);
+}
+
+TEST_CASE("Deck index validation", "[deck]") {
+    Deck deck(false, "Test");
+    Deck dest(true, "Dest");
+
+    SECTION("getCard rejects out-of-range indices") {
+        REQUIRE_THROWS_AS(deck.getCard(-1), std::out_of_range);
+        REQUIRE_THROWS_AS(deck.getCard(52), std::out_of_range);
+        REQUIRE_NOTHROW(deck.getCard(0));
+        REQUIRE_NOTHROW(deck.getCard(51));
+    }
+
+    SECTION("moveTo rejects out-of-range indices and leaves both decks unchanged") {
+        REQUIRE_THROWS_AS(deck.moveTo(dest, -1), std::out_of_range);
+        REQUIRE_THROWS_AS(deck.moveTo(dest, 52), std::out_of_range);
+        REQUIRE(deck.size() == 52);
+        REQUIRE(dest.size() == 0);
+    }
+
+    SECTION("moveTo on an empty deck throws instead of reading past the end") {
+        Deck empty(true, "Empty");
+        REQUIRE_THROWS_AS(empty.moveTo(dest, 0), std::out_of_range);
+        REQUIRE(dest.size() == 0);
+    }
+
+    SECTION("The error message names the rejected index and the deck size") {
+        REQUIRE_THROWS_WITH(deck.getCard(52),
+            "Index out of range for Deck 'Test' (size 52)! Index given: 52");
+        REQUIRE_THROWS_WITH(dest.moveTo(deck, 0),
+            "Index out of range for Deck 'Dest' (size 0)! Index given: 0");
+    }
+}
+
+TEST_CASE("Deck observers are callable on a const Deck", "[deck][const]") {
+    const Deck deck(false, "Const");
+
+    REQUIRE(deck.size() == 52);
+    REQUIRE_FALSE(deck.empty());
+    REQUIRE(deck.getName() == "Const");
+    REQUIRE(deck.contains(13) >= 0);
+    REQUIRE(deck.howMany(1) == 4);
+    REQUIRE(deck.getCard(0).getName() == "Ace of Hearts");
+
+    std::ostringstream oss;
+    oss << deck;
+    REQUIRE(oss.str().substr(0, 13) == "Ace of Hearts");
 }

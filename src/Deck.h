@@ -7,7 +7,7 @@
 
 class Deck {
 	std::vector<Card> cards;
-	MyLogger log;
+	mutable MyLogger log;
 	std::string name;
   public:
 	Deck(bool empty, const char *n);
@@ -16,15 +16,15 @@ class Deck {
 	void shuffle();
 	void sortInOrder();
 	void moveTo(Deck &dest, int sourceIndex);
-	void print();
-	std::string getName();
-	bool empty();
-	int contains(int rank);
-	Card getCard(int index);
-	int size();
-	int howMany(int num);
+	void print() const;
+	std::string getName() const;
+	bool empty() const;
+	int contains(int rank) const;
+	Card getCard(int index) const;
+	int size() const;
+	int howMany(int num) const;
 };
 
-std::ostream& operator<<(std::ostream &out, Deck &d);
+std::ostream& operator<<(std::ostream &out, const Deck &d);
 
 #endif

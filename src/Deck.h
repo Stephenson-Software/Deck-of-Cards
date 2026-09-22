@@ -9,6 +9,8 @@ class Deck {
 	std::vector<Card> cards;
 	mutable MyLogger log;
 	std::string name;
+
+	void checkIndex(int index) const;
   public:
 	Deck(bool empty, const char *n);
 	

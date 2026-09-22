@@ -5,8 +5,15 @@
 #include <algorithm>
 #include <ctime>
 #include <random>
+#include <stdexcept>
 
 using namespace std;
+
+void Deck::checkIndex(int index) const {
+	if (index < 0 || static_cast<size_t>(index) >= cards.size()) {
+		throw out_of_range("Index out of range for Deck '" + name + "' (size " + to_string(cards.size()) + ")! Index given: " + to_string(index));
+	}
+}
 
 Deck::Deck(bool empty, const char *n) {
 	log.setDebug(false);
@@ -49,6 +56,7 @@ void Deck::sortInOrder() {
 }
 
 void Deck::moveTo(Deck &dest, int sourceIndex) {
+	checkIndex(sourceIndex);
 	log("Moving card '" + cards[sourceIndex].getName() + "' from Deck '" + name + "' to Deck '" + dest.getName() + "'");
 	Card temp = cards[sourceIndex];
 //	log("Erasing card '" + cards[sourceIndex].getName() + "' from Deck '" + name + "'");
@@ -85,6 +93,7 @@ int Deck::contains(int rank) const {
 }
 
 Card Deck::getCard(int index) const {
+	checkIndex(index);
 	return cards[index];
 }
 

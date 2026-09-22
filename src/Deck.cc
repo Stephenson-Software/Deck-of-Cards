@@ -5,8 +5,15 @@
 #include <algorithm>
 #include <ctime>
 #include <random>
+#include <stdexcept>
 
 using namespace std;
+
+void Deck::checkIndex(int index) const {
+	if (index < 0 || static_cast<size_t>(index) >= cards.size()) {
+		throw out_of_range("Index out of range for Deck '" + name + "' (size " + to_string(cards.size()) + ")! Index given: " + to_string(index));
+	}
+}
 
 Deck::Deck(bool empty, const char *n) {
 	log.setDebug(false);
@@ -49,6 +56,7 @@ void Deck::sortInOrder() {
 }
 
 void Deck::moveTo(Deck &dest, int sourceIndex) {
+	checkIndex(sourceIndex);
 	log("Moving card '" + cards[sourceIndex].getName() + "' from Deck '" + name + "' to Deck '" + dest.getName() + "'");
 	Card temp = cards[sourceIndex];
 //	log("Erasing card '" + cards[sourceIndex].getName() + "' from Deck '" + name + "'");
@@ -56,22 +64,22 @@ void Deck::moveTo(Deck &dest, int sourceIndex) {
 	dest.cards.push_back(temp);
 }
 
-void Deck::print() {
+void Deck::print() const {
 	log("Printing Deck '" + name + "'");
 	for (size_t i = 0; i < cards.size(); i++) {
 		cout << cards[i] << "\n";
 	}
 }
 
-string Deck::getName() {
+string Deck::getName() const {
 	return name;
 }
 
-bool Deck::empty() {
+bool Deck::empty() const {
 	return cards.empty();
 }
 
-int Deck::contains(int rank) {
+int Deck::contains(int rank) const {
 	log("Searching for '" + to_string(rank) + "'s in Deck '" + name + "'");
 	int index = -1;
 	for (size_t i = 0; i < cards.size(); i++) {
@@ -84,15 +92,16 @@ int Deck::contains(int rank) {
 	return index;
 }
 
-Card Deck::getCard(int index) {
+Card Deck::getCard(int index) const {
+	checkIndex(index);
 	return cards[index];
 }
 
-int Deck::size() {
+int Deck::size() const {
 	return cards.size();
 }
 
-int Deck::howMany(int num) {
+int Deck::howMany(int num) const {
 	int count = 0;
 	for (size_t i = 0; i < cards.size(); i++) {
 		if (cards[i].getRank() == num) {
@@ -102,7 +111,7 @@ int Deck::howMany(int num) {
 	return count;
 }
 
-std::ostream& operator<<(std::ostream &out, Deck &d) {
+std::ostream& operator<<(std::ostream &out, const Deck &d) {
 	for (int i = 0; i < d.size(); i++) {
 		Card card = d.getCard(i);
 		out << card;

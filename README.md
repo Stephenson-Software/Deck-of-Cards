@@ -41,6 +41,6 @@ The project includes a GitHub Actions CI pipeline that automatically:
 - Provides immediate feedback on pull requests and commits
 
 The project includes comprehensive unit tests covering:
-- Card construction, operators, and methods (28 assertions)
-- Deck operations, shuffling, and card management (68 assertions)
+- Card construction, operators, and methods
+- Deck operations, shuffling, card management, and index validation
 - Error handling and edge cases

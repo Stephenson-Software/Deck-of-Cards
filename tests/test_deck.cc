@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include "Deck.h"
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -130,8 +131,8 @@ TEST_CASE("Deck stream output", "[deck]") {
     std::ostringstream oss;
     oss << emptyDeck;
     
-    // Should not crash with empty deck
-    REQUIRE(oss.str().length() >= 0);
+    // An empty deck writes nothing
+    REQUIRE(oss.str().empty());
     
     // Test with one card
     Deck singleCardDeck(true, "Single");
@@ -188,4 +189,57 @@ TEST_CASE("Deck observers are callable on a const Deck", "[deck][const]") {
     std::ostringstream oss;
     oss << deck;
     REQUIRE(oss.str().substr(0, 13) == "Ace of Hearts");
+}
+
+TEST_CASE("generate() orders cards by suit, then Ace through King", "[deck]") {
+    Deck deck(false, "Test");
+
+    REQUIRE(deck.getCard(0).getName() == "Ace of Hearts");
+    REQUIRE(deck.getCard(12).getName() == "King of Hearts");
+    REQUIRE(deck.getCard(13).getName() == "Ace of Spades");
+    REQUIRE(deck.getCard(26).getName() == "Ace of Diamonds");
+    REQUIRE(deck.getCard(39).getName() == "Ace of Clubs");
+    REQUIRE(deck.getCard(51).getName() == "King of Clubs");
+}
+
+TEST_CASE("contains returns the index of the first matching card, or -1", "[deck]") {
+    Deck deck(false, "Test");
+
+    REQUIRE(deck.contains(1) == 0);
+    REQUIRE(deck.contains(13) == 12);
+    REQUIRE(deck.contains(0) == -1);
+    REQUIRE(deck.contains(14) == -1);
+
+    SECTION("The next match is found once the first is moved away") {
+        Deck dest(true, "Dest");
+        deck.moveTo(dest, 0);  // Ace of Hearts
+        REQUIRE(deck.contains(1) == 12);  // Ace of Spades
+    }
+
+    SECTION("An empty deck contains nothing") {
+        Deck empty(true, "Empty");
+        REQUIRE(empty.contains(1) == -1);
+        REQUIRE(empty.howMany(1) == 0);
+    }
+}
+
+TEST_CASE("Deck output writes one card name per line", "[deck]") {
+    Deck source(false, "Source");
+    Deck hand(true, "Hand");
+    source.moveTo(hand, 0);  // Ace of Hearts
+    source.moveTo(hand, 0);  // Two of Hearts
+
+    SECTION("operator<< separates names with newlines and adds no trailing newline") {
+        std::ostringstream oss;
+        oss << hand;
+        REQUIRE(oss.str() == "Ace of Hearts\nTwo of Hearts");
+    }
+
+    SECTION("print() writes each name to std::cout followed by a newline") {
+        std::ostringstream captured;
+        std::streambuf *original = std::cout.rdbuf(captured.rdbuf());
+        hand.print();
+        std::cout.rdbuf(original);
+        REQUIRE(captured.str() == "Ace of Hearts\nTwo of Hearts\n");
+    }
 }

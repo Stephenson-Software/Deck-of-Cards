@@ -1,13 +1,15 @@
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers.hpp>
 #include "Card.h"
 #include <sstream>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
 #include <functional>
 
 TEST_CASE("Card construction", "[card]") {
     SECTION("Valid card creation with string suit") {
-        Card card(1, "Hearts");
+        Card card(1, std::string("Hearts"));
         REQUIRE(card.getRank() == 1);
         REQUIRE(card.getSuit() == "Hearts");
         REQUIRE(card.getName() == "Ace of Hearts");
@@ -24,6 +26,11 @@ TEST_CASE("Card construction", "[card]") {
         REQUIRE_THROWS_AS(Card(0, "Hearts"), std::runtime_error);
         REQUIRE_THROWS_AS(Card(14, "Hearts"), std::runtime_error);
         REQUIRE_THROWS_AS(Card(-1, "Hearts"), std::runtime_error);
+    }
+
+    SECTION("The error message names the rejected rank") {
+        REQUIRE_THROWS_WITH(Card(0, "Hearts"), "Rank not between 1-13! Rank given: 0");
+        REQUIRE_THROWS_WITH(Card(14, std::string("Spades")), "Rank not between 1-13! Rank given: 14");
     }
 }
 
@@ -47,6 +54,17 @@ TEST_CASE("Card name generation", "[card]") {
         REQUIRE(jack.getName() == "Jack of Spades");
         REQUIRE(queen.getName() == "Queen of Hearts");
         REQUIRE(king.getName() == "King of Diamonds");
+    }
+
+    SECTION("Every rank from 1 to 13") {
+        const char *names[] = {
+            "Ace", "Two", "Three", "Four", "Five", "Six", "Seven",
+            "Eight", "Nine", "Ten", "Jack", "Queen", "King"
+        };
+        for (int rank = 1; rank <= 13; rank++) {
+            Card card(rank, "Clubs");
+            REQUIRE(card.getName() == std::string(names[rank - 1]) + " of Clubs");
+        }
     }
 }
 

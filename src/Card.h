@@ -12,15 +12,8 @@ class Card {
 	// ctor
 	Card(int r, const char *s);
 	Card(int r, std::string s);
-	
-	// dtor
-	~Card() = default;
-	
-	// copy constructor
-	Card(const Card &other);
-	
+
 	// operators
-	Card& operator=(const Card &other);
 	bool operator==(const Card &other) const;
 	bool operator<(const Card &other) const;
 	

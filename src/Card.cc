@@ -65,23 +65,7 @@ Card::Card(int r, string s) {
 	}
 }
 
-// copy constructor
-Card::Card(const Card &other) {
-	rank = other.getRank();
-	suit = other.getSuit();
-	name = other.getName();
-}
-
 // operators
-Card& Card::operator=(const Card &other) {
-	if (this != &other) {
-		rank = other.getRank();
-		suit = other.getSuit();
-		name = other.getName();
-	}
-	return *this;
-}
-
 bool Card::operator==(const Card &other) const {
 	if ((rank == other.getRank()) && (suit == other.getSuit()) && (name == other.getName())) {
 		return true;

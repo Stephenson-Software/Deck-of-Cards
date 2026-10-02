@@ -6,6 +6,7 @@
 #include <string>
 #include <type_traits>
 #include <functional>
+#include <utility>
 
 TEST_CASE("Card construction", "[card]") {
     SECTION("Valid card creation with string suit") {
@@ -86,6 +87,23 @@ TEST_CASE("Card assignment operator", "[card]") {
     REQUIRE(card2.getRank() == card1.getRank());
     REQUIRE(card2.getSuit() == card1.getSuit());
     REQUIRE(card2.getName() == card1.getName());
+}
+
+TEST_CASE("Card is nothrow-movable", "[card][move]") {
+    // std::vector reallocation moves elements only when the move constructor
+    // is noexcept; otherwise every Card (two std::strings) is copied.
+    STATIC_REQUIRE(std::is_nothrow_move_constructible_v<Card>);
+    STATIC_REQUIRE(std::is_nothrow_move_assignable_v<Card>);
+
+    Card source(12, "Hearts");
+    Card moved(std::move(source));
+    REQUIRE(moved.getRank() == 12);
+    REQUIRE(moved.getSuit() == "Hearts");
+    REQUIRE(moved.getName() == "Queen of Hearts");
+
+    Card target(3, "Clubs");
+    target = std::move(moved);
+    REQUIRE(target.getName() == "Queen of Hearts");
 }
 
 TEST_CASE("Card equality operator", "[card]") {

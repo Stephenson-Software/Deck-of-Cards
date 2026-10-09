@@ -1,9 +1,12 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include "Deck.h"
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 TEST_CASE("Deck construction", "[deck]") {
     SECTION("Empty deck creation") {
@@ -65,8 +68,7 @@ TEST_CASE("Deck card access", "[deck]") {
 
 TEST_CASE("Deck shuffle", "[deck]") {
     Deck deck1(false, "Original");
-    Deck deck2(false, "Copy");
-    
+
     // Get initial order
     std::vector<std::string> original_order;
     for (int i = 0; i < deck1.size(); i++) {
@@ -82,6 +84,15 @@ TEST_CASE("Deck shuffle", "[deck]") {
     for (int rank = 1; rank <= 13; rank++) {
         REQUIRE(deck1.howMany(rank) == 4);
     }
+
+    // The shuffled deck holds exactly the original 52 cards, each once
+    std::vector<std::string> shuffled_order;
+    for (int i = 0; i < deck1.size(); i++) {
+        shuffled_order.push_back(deck1.getCard(i).getName());
+    }
+    std::sort(original_order.begin(), original_order.end());
+    std::sort(shuffled_order.begin(), shuffled_order.end());
+    REQUIRE(shuffled_order == original_order);
 }
 
 TEST_CASE("Deck sorting", "[deck]") {
@@ -99,6 +110,21 @@ TEST_CASE("Deck sorting", "[deck]") {
     // Last card should be King (rank 13)
     Card lastCard = deck.getCard(51);
     REQUIRE(lastCard.getRank() == 13);
+
+    // Every card's rank is at least the rank of the card before it
+    for (int i = 1; i < deck.size(); i++) {
+        REQUIRE(deck.getCard(i - 1).getRank() <= deck.getCard(i).getRank());
+    }
+}
+
+TEST_CASE("generate() appends to a non-empty deck instead of replacing it", "[deck]") {
+    Deck deck(false, "Test");
+    deck.generate();
+
+    REQUIRE(deck.size() == 104);
+    REQUIRE(deck.howMany(1) == 8);
+    REQUIRE(deck.getCard(51).getName() == "King of Clubs");
+    REQUIRE(deck.getCard(52).getName() == "Ace of Hearts");
 }
 
 TEST_CASE("Deck move operations", "[deck]") {
@@ -119,6 +145,12 @@ TEST_CASE("Deck move operations", "[deck]") {
     Card receivedCard = destDeck.getCard(0);
     REQUIRE(receivedCard.getRank() == movedCard.getRank());
     REQUIRE(receivedCard.getSuit() == movedCard.getSuit());
+
+    // A second move lands at the end of the destination, after the first
+    sourceDeck.moveTo(destDeck, 0);
+    REQUIRE(destDeck.size() == 2);
+    REQUIRE(destDeck.getCard(0).getName() == "Ace of Hearts");
+    REQUIRE(destDeck.getCard(1).getName() == "Two of Hearts");
 }
 
 TEST_CASE("Deck name operations", "[deck]") {

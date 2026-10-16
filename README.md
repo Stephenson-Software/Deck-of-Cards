@@ -55,7 +55,7 @@ make
 
 ### Running Tests
 ```bash
-# Run all tests
+# Run all tests (both unit test suites, plus the two original test programs as smoke tests)
 ctest
 
 # Run individual test suites
@@ -74,6 +74,7 @@ ctest
 The project includes a GitHub Actions CI pipeline that automatically:
 - Builds the project on Ubuntu, macOS, and Windows
 - Runs all unit tests in both Debug and Release configurations
+- Runs the original test programs: `testCard` must print its final `Ace of Hearts (rank 1)` line, and `testingDeck` must exit successfully
 - Provides immediate feedback on pull requests and commits
 
 The project includes comprehensive unit tests covering:

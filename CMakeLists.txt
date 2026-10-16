@@ -57,3 +57,11 @@ target_link_libraries(testCard deck_of_cards)
 
 add_executable(testingDeck testing/testingDeck.cc)
 target_link_libraries(testingDeck deck_of_cards)
+
+# Run the demo programs as smoke tests. testCard's output is deterministic, so
+# its last line is checked (no \n in the pattern: Windows writes \r\n);
+# testingDeck shuffles, so only its exit status is checked.
+add_test(NAME testCard_demo COMMAND testCard)
+set_tests_properties(testCard_demo PROPERTIES
+    PASS_REGULAR_EXPRESSION "Ace of Hearts \\(rank 1\\)")
+add_test(NAME testingDeck_demo COMMAND testingDeck)

@@ -43,7 +43,7 @@ This project uses CMake as its build system and Catch2 for unit testing. Continu
 
 ### Prerequisites
 - C++17 compatible compiler
-- CMake 3.10 or higher
+- CMake 3.14 or higher
 
 ### Building
 ```bash

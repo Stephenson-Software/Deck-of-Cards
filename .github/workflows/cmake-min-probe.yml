@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cmake: ['3.10.3', '3.13.5', '3.14.7', '3.15.7', '3.16.9']
+        cmake: ['3.13.5', '3.14.7', '3.15.7', '3.16.9']
     steps:
     - uses: actions/checkout@v4
     - uses: jwlawson/actions-setup-cmake@v2

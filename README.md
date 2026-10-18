@@ -1,6 +1,10 @@
 # Deck-of-Cards
 Represents a 52-card deck with C++. Allows for creation of empty decks and movement. Has some other functionality as well.
 
+![Output of the testingDeck demo program: two seven-card hands dealt from a shuffled deck](docs/images/deck-of-cards.png)
+
+*The last 15 lines printed by `testing/testingDeck.cc`: the two seven-card hands it deals from a shuffled deck.*
+
 ## API overview
 
 Include `Card.h` and/or `Deck.h` from `src/` and link against `src/Card.cc` and `src/Deck.cc` (the CMake build below packages these as the `deck_of_cards` library).
@@ -95,3 +99,7 @@ The project includes comprehensive unit tests covering:
 - Card construction, operators, and methods
 - Deck operations, shuffling, card management, and index validation
 - Error handling and edge cases
+
+## How the screenshot was captured
+
+`docs/images/deck-of-cards.png` was captured on 2026-10-18 from a real run of the `testingDeck` program built with the CMake steps above, piped through `tail -n 15` as the image shows. The program's output was rendered to an image with [pyte](https://github.com/selectel/pyte) and [Pillow](https://python-pillow.org/). Nothing in the output was edited; only the window frame was added.

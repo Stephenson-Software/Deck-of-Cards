@@ -44,13 +44,14 @@ This project uses CMake as its build system and Catch2 for unit testing. Continu
 ### Prerequisites
 - C++17 compatible compiler
 - CMake 3.14 or higher
+- Network access the first time you configure, unless Catch2 v3 is already installed: CMake downloads Catch2 v3.4.0 from GitHub when `find_package(Catch2 3)` finds no installed copy
 
 ### Building
 ```bash
 mkdir build
 cd build
 cmake ..
-make
+cmake --build .
 ```
 
 ### Running Tests
@@ -68,6 +69,19 @@ ctest
 ./testCard     # Original Card testing program
 ./testingDeck  # Original Deck testing program
 ```
+
+### Multi-configuration generators (Visual Studio, Xcode)
+
+The commands above assume a single-configuration generator such as Unix Makefiles or Ninja, the default on Linux and macOS. On Windows, CMake defaults to a Visual Studio generator, which keeps several configurations in one build directory. With it, name the configuration when building and testing, and run the programs from the configuration's subdirectory:
+
+```bash
+cmake --build . --config Debug
+ctest -C Debug
+./Debug/test_card
+./Debug/testCard
+```
+
+Use `Release` in place of `Debug` for a release build. CI passes `--config` and `-C` on every platform, and its Windows legs build with the Visual Studio generator.
 
 ### Continuous Integration
 

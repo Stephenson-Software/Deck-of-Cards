@@ -13,7 +13,7 @@ int main() {
 	suits.push_back("Clubs");
 	
 	for (size_t j = 0; j < suits.size(); j++) {
-		for (size_t i = 1; i < 14; i++) {
+		for (int i = 1; i < 14; i++) {
 			Card c(i, suits[j]);
 			cards.push_back(c);
 		}

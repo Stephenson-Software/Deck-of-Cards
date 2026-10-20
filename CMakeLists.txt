@@ -65,3 +65,13 @@ add_test(NAME testCard_demo COMMAND testCard)
 set_tests_properties(testCard_demo PROPERTIES
     PASS_REGULAR_EXPRESSION "Ace of Hearts \\(rank 1\\)")
 add_test(NAME testingDeck_demo COMMAND testingDeck)
+
+# Report compiler warnings for this project's own targets only. The fetched
+# Catch2 sources are left at their defaults. Warnings are not errors.
+foreach(target deck_of_cards test_card test_deck testCard testingDeck)
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /W4)
+    else()
+        target_compile_options(${target} PRIVATE -Wall -Wextra)
+    endif()
+endforeach()

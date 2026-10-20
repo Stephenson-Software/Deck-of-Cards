@@ -58,6 +58,8 @@ cmake ..
 cmake --build .
 ```
 
+The project's own targets build with `-Wall -Wextra` (GCC and Clang) or `/W4` (MSVC). Warnings are reported but do not fail the build. The downloaded Catch2 sources keep their default warning settings.
+
 ### Running Tests
 ```bash
 # Run all tests (both unit test suites, plus the two original test programs as smoke tests)

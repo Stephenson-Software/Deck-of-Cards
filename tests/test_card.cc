@@ -33,6 +33,12 @@ TEST_CASE("Card construction", "[card]") {
         REQUIRE_THROWS_WITH(Card(0, "Hearts"), "Rank not between 1-13! Rank given: 0");
         REQUIRE_THROWS_WITH(Card(14, std::string("Spades")), "Rank not between 1-13! Rank given: 14");
     }
+
+    SECTION("A null const char* suit throws instead of being dereferenced") {
+        const char *noSuit = nullptr;
+        REQUIRE_THROWS_AS(Card(1, noSuit), std::invalid_argument);
+        REQUIRE_THROWS_WITH(Card(1, noSuit), "Suit must not be null!");
+    }
 }
 
 TEST_CASE("Card name generation", "[card]") {

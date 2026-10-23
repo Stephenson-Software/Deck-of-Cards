@@ -22,6 +22,13 @@ TEST_CASE("Deck construction", "[deck]") {
         REQUIRE(fullDeck.size() == 52);
         REQUIRE(fullDeck.getName() == "Full");
     }
+
+    SECTION("A null name throws instead of being dereferenced") {
+        const char *noName = nullptr;
+        REQUIRE_THROWS_AS(Deck(true, noName), std::invalid_argument);
+        REQUIRE_THROWS_AS(Deck(false, noName), std::invalid_argument);
+        REQUIRE_THROWS_WITH(Deck(true, noName), "Deck name must not be null!");
+    }
 }
 
 TEST_CASE("Deck generation", "[deck]") {

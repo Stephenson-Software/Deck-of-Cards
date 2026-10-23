@@ -6,7 +6,7 @@
 using namespace std;
 
 // ctor
-Card::Card(int r, const char *s) : Card(r, string(s)) {}
+Card::Card(int r, const char *s) : Card(r, string(s ? s : throw invalid_argument("Suit must not be null!"))) {}
 
 Card::Card(int r, string s) {
 	

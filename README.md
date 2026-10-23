@@ -13,7 +13,7 @@ Include `Card.h` and/or `Deck.h` from `src/` and link against `src/Card.cc` and 
 
 A single card: a rank from 1 (Ace) to 13 (King) plus a suit string.
 
-- `Card(int rank, std::string suit)` / `Card(int rank, const char *suit)` — throws `std::runtime_error` if `rank` is not between 1 and 13. The suit is stored as given; it is not validated.
+- `Card(int rank, std::string suit)` / `Card(int rank, const char *suit)` — throws `std::runtime_error` if `rank` is not between 1 and 13, and the `const char *` overload throws `std::invalid_argument` if `suit` is null. The suit is otherwise stored as given; it is not validated.
 - `getRank()` — the rank, 1–13.
 - `getSuit()` — the suit string passed to the constructor.
 - `getName()` — the card's name, e.g. `"Ace of Hearts"`, `"Seven of Clubs"`, `"Queen of Spades"`.
@@ -25,7 +25,7 @@ A single card: a rank from 1 (Ace) to 13 (King) plus a suit string.
 
 A named, ordered collection of `Card`s.
 
-- `Deck(bool empty, const char *name)` — creates an empty deck when `empty` is `true`; otherwise calls `generate()` to fill it with the 52 standard cards.
+- `Deck(bool empty, const char *name)` — creates an empty deck when `empty` is `true`; otherwise calls `generate()` to fill it with the 52 standard cards. Throws `std::invalid_argument` if `name` is null.
 - `generate()` — appends the 52 standard cards (Hearts, Spades, Diamonds, Clubs; Ace through King within each suit). Existing cards are not removed first, so calling it on a non-empty deck adds to what is already there.
 - `shuffle()` — shuffles the cards randomly (`std::shuffle` with a `std::mt19937` seeded from `std::random_device`).
 - `sortInOrder()` — sorts by rank using `Card::operator<`; the relative order of equal-rank cards of different suits is unspecified.

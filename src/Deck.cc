@@ -14,6 +14,9 @@ void Deck::checkIndex(int index) const {
 }
 
 Deck::Deck(bool empty, const char *n) {
+	if (n == nullptr) {
+		throw invalid_argument("Deck name must not be null!");
+	}
 	log.setDebug(false);
 	log.setProgramName("Deck.cc");
 	log("Creating Deck Object");

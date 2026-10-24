@@ -160,6 +160,19 @@ TEST_CASE("Deck move operations", "[deck]") {
     REQUIRE(destDeck.getCard(1).getName() == "Two of Hearts");
 }
 
+TEST_CASE("moveTo with the deck as its own destination moves the card to the end", "[deck]") {
+    // The source and destination alias the same vector here, so the card must
+    // be copied out before it is erased and appended.
+    Deck deck(false, "Self");
+
+    deck.moveTo(deck, 0);
+
+    REQUIRE(deck.size() == 52);
+    REQUIRE(deck.howMany(1) == 4);
+    REQUIRE(deck.getCard(0).getName() == "Two of Hearts");
+    REQUIRE(deck.getCard(51).getName() == "Ace of Hearts");
+}
+
 TEST_CASE("Deck name operations", "[deck]") {
     Deck deck(true, "TestName");
     REQUIRE(deck.getName() == "TestName");

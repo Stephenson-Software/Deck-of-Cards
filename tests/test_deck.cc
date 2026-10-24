@@ -169,7 +169,7 @@ TEST_CASE("moveTo with the deck as its own destination moves the card to the end
 
     REQUIRE(deck.size() == 52);
     REQUIRE(deck.howMany(1) == 4);
-    REQUIRE(deck.getCard(0).getName() == "Ace of Hearts");
+    REQUIRE(deck.getCard(0).getName() == "Two of Hearts");
     REQUIRE(deck.getCard(51).getName() == "Ace of Hearts");
 }
 

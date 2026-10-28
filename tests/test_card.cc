@@ -75,6 +75,27 @@ TEST_CASE("Card name generation", "[card]") {
     }
 }
 
+TEST_CASE("Card stores the suit as given without validating it", "[card]") {
+    SECTION("A suit outside the four standard ones is accepted") {
+        Card card(1, "Stars");
+        REQUIRE(card.getSuit() == "Stars");
+        REQUIRE(card.getName() == "Ace of stars");
+    }
+
+    SECTION("An empty suit is accepted") {
+        Card card(12, std::string(""));
+        REQUIRE(card.getSuit().empty());
+        REQUIRE(card.getName() == "Queen of ");
+    }
+
+    SECTION("The suit's case is kept, so equality is case-sensitive") {
+        Card lower(5, "hearts");
+        REQUIRE(lower.getSuit() == "hearts");
+        REQUIRE(lower.getName() == "Five of hearts");
+        REQUIRE_FALSE(lower == Card(5, "Hearts"));
+    }
+}
+
 TEST_CASE("Card copy constructor", "[card]") {
     Card original(7, "Hearts");
     Card copy(original);

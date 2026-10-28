@@ -32,7 +32,7 @@ A named, ordered collection of `Card`s.
 - `moveTo(Deck &dest, int index)` — removes the card at `index` from this deck and appends it to the end of `dest`. When `dest` is this same deck, the card moves to the end of it and the size is unchanged. Throws `std::out_of_range` if `index` is not a valid position.
 - `getCard(int index)` — returns a copy of the card at `index`. Throws `std::out_of_range` if `index` is not a valid position.
 - `contains(int rank)` — returns the **index** of the first card with that rank, or `-1` if there is none (not a `bool`).
-- `howMany(int rank)` — the number of cards with that rank.
+- `howMany(int rank)` — the number of cards with that rank; `0` for a rank outside 1–13 (it does not throw).
 - `size()` — the number of cards.
 - `empty()` — `true` when the deck holds no cards.
 - `getName()` — the name passed to the constructor.

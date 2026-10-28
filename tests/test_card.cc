@@ -79,7 +79,7 @@ TEST_CASE("Card stores the suit as given without validating it", "[card]") {
     SECTION("A suit outside the four standard ones is accepted") {
         Card card(1, "Stars");
         REQUIRE(card.getSuit() == "Stars");
-        REQUIRE(card.getName() == "Ace of stars");
+        REQUIRE(card.getName() == "Ace of Stars");
     }
 
     SECTION("An empty suit is accepted") {

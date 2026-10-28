@@ -261,7 +261,7 @@ TEST_CASE("contains returns the index of the first matching card, or -1", "[deck
     REQUIRE(deck.contains(13) == 12);
     REQUIRE(deck.contains(0) == -1);
     REQUIRE(deck.contains(14) == -1);
-    REQUIRE(deck.howMany(0) == 1);
+    REQUIRE(deck.howMany(0) == 0);
     REQUIRE(deck.howMany(14) == 0);
     REQUIRE(deck.howMany(-1) == 0);
 

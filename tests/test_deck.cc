@@ -189,10 +189,12 @@ TEST_CASE("A copied Deck holds its own cards, independent of the original", "[de
     }
 
     SECTION("Copy assignment replaces the target's cards and name") {
-        Deck target(true, "Target");
+        Deck target(false, "Target");
+        target.moveTo(dest, 0);  // target now starts with Two of Hearts
         target = original;
         REQUIRE(target.getName() == "Original");
-        REQUIRE(target.size() == 52);
+        REQUIRE(target.size() == 52);  // replaced, not appended (which would give 103)
+        REQUIRE(target.getCard(0).getName() == "Ace of Hearts");
 
         original.moveTo(dest, 0);  // Ace of Hearts leaves the original only
         REQUIRE(original.size() == 51);

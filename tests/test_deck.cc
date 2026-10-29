@@ -173,6 +173,34 @@ TEST_CASE("moveTo with the deck as its own destination moves the card to the end
     REQUIRE(deck.getCard(51).getName() == "Ace of Hearts");
 }
 
+TEST_CASE("A copied Deck holds its own cards, independent of the original", "[deck][copy]") {
+    Deck original(false, "Original");
+    Deck dest(true, "Dest");
+
+    SECTION("Copy construction") {
+        Deck copy(original);
+        REQUIRE(copy.getName() == "Original");
+        REQUIRE(copy.size() == 52);
+
+        copy.moveTo(dest, 0);  // Ace of Hearts leaves the copy only
+        REQUIRE(copy.size() == 51);
+        REQUIRE(original.size() == 52);
+        REQUIRE(original.getCard(0).getName() == "Ace of Hearts");
+    }
+
+    SECTION("Copy assignment replaces the target's cards and name") {
+        Deck target(true, "Target");
+        target = original;
+        REQUIRE(target.getName() == "Original");
+        REQUIRE(target.size() == 52);
+
+        original.moveTo(dest, 0);  // Ace of Hearts leaves the original only
+        REQUIRE(original.size() == 51);
+        REQUIRE(target.size() == 52);
+        REQUIRE(target.getCard(0).getName() == "Ace of Hearts");
+    }
+}
+
 TEST_CASE("Deck name operations", "[deck]") {
     Deck deck(true, "TestName");
     REQUIRE(deck.getName() == "TestName");

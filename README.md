@@ -38,6 +38,7 @@ A named, ordered collection of `Card`s.
 - `getName()` — the name passed to the constructor.
 - `print()` — writes each card's name to `std::cout`, one per line.
 - `operator<<(std::ostream&, const Deck&)` — writes each card's name, separated by newlines (no trailing newline).
+- Logging — `Deck` has an internal debug logger (`src/helper/mylogger.h`) that every `Deck` turns off in its constructor, so a `Deck` writes to `std::cout` only when asked to: through `print()`, or `operator<<` given `std::cout`.
 - Copying — `Deck` uses the compiler-generated copy constructor and copy assignment. A copy gets its own cards and the same name, so moving cards out of one deck does not change the other.
 
 `testing/testingDeck.cc` shows these calls together: it builds a full deck, shuffles it, and deals seven cards each to two empty decks with `myDeck.moveTo(playerone, 0)` and `myDeck.moveTo(playertwo, 0)`.

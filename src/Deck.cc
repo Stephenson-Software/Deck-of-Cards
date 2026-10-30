@@ -17,7 +17,7 @@ Deck::Deck(bool empty, const char *n) {
 	if (n == nullptr) {
 		throw invalid_argument("Deck name must not be null!");
 	}
-	log.setDebug(false);
+	log.setDebug(true);
 	log.setProgramName("Deck.cc");
 	log("Creating Deck Object");
 	if (!empty) {

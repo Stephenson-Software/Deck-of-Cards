@@ -328,3 +328,34 @@ TEST_CASE("Deck output writes one card name per line", "[deck]") {
         REQUIRE(captured.str() == "Ace of Hearts\nTwo of Hearts\n");
     }
 }
+
+TEST_CASE("Deck's debug logging is off, so only print() writes to std::cout", "[deck][logging]") {
+    std::ostringstream captured;
+    std::streambuf *original = std::cout.rdbuf(captured.rdbuf());
+
+    Deck source(false, "Source");
+    Deck hand(true, "Hand");
+    hand.generate();
+    source.shuffle();
+    source.sortInOrder();
+    source.moveTo(hand, 0);
+    int found = source.contains(1);    // logs "Found!" when debug is on
+    int missing = source.contains(14);
+    int count = source.howMany(1);
+    std::string name = source.getCard(0).getName();
+    Deck copy = source;
+    copy.moveTo(source, 0);
+    std::ostringstream elsewhere;
+    elsewhere << hand;
+
+    std::cout.rdbuf(original);
+
+    REQUIRE(captured.str().empty());
+    REQUIRE(found >= 0);
+    REQUIRE(missing == -1);
+    REQUIRE(count == 3);
+    REQUIRE(!name.empty());
+    REQUIRE(hand.size() == 53);
+    REQUIRE(source.size() == 52);
+    REQUIRE(copy.size() == 50);
+}

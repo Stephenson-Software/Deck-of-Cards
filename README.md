@@ -28,7 +28,7 @@ A named, ordered collection of `Card`s.
 - `Deck(bool empty, const char *name)` — creates an empty deck when `empty` is `true`; otherwise calls `generate()` to fill it with the 52 standard cards. Throws `std::invalid_argument` if `name` is null.
 - `generate()` — appends the 52 standard cards (Hearts, Spades, Diamonds, Clubs; Ace through King within each suit). Existing cards are not removed first, so calling it on a non-empty deck adds to what is already there.
 - `shuffle()` — shuffles the cards randomly (`std::shuffle` with a `std::mt19937` seeded from `std::random_device`).
-- `sortInOrder()` — sorts by rank using `Card::operator<`; the relative order of equal-rank cards of different suits is unspecified.
+- `sortInOrder()` — sorts by rank using `Card::operator<`; the relative order of equal-rank cards of different suits is unspecified. Sorting keeps every card exactly once. On an empty or one-card deck, `shuffle()` and `sortInOrder()` leave the deck as it is.
 - `moveTo(Deck &dest, int index)` — removes the card at `index` from this deck and appends it to the end of `dest`. When `dest` is this same deck, the card moves to the end of it and the size is unchanged. Throws `std::out_of_range` if `index` is not a valid position.
 - `getCard(int index)` — returns a copy of the card at `index`. Throws `std::out_of_range` if `index` is not a valid position.
 - `contains(int rank)` — returns the **index** of the first card with that rank, or `-1` if there is none (not a `bool`).

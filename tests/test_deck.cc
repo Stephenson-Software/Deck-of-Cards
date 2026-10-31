@@ -359,3 +359,55 @@ TEST_CASE("Deck's debug logging is off, so only print() writes to std::cout", "[
     REQUIRE(source.size() == 52);
     REQUIRE(copy.size() == 50);
 }
+
+TEST_CASE("sortInOrder() keeps every card exactly once", "[deck]") {
+    Deck deck(false, "Test");
+    std::vector<std::string> before;
+    for (int i = 0; i < deck.size(); i++) {
+        before.push_back(deck.getCard(i).getName());
+    }
+
+    deck.shuffle();
+    deck.sortInOrder();
+
+    // Four cards of each rank, Aces first and Kings last
+    REQUIRE(deck.size() == 52);
+    for (int i = 0; i < deck.size(); i++) {
+        REQUIRE(deck.getCard(i).getRank() == i / 4 + 1);
+    }
+
+    // No card is lost or duplicated, so each rank still holds all four suits
+    std::vector<std::string> after;
+    for (int i = 0; i < deck.size(); i++) {
+        after.push_back(deck.getCard(i).getName());
+    }
+    std::sort(before.begin(), before.end());
+    std::sort(after.begin(), after.end());
+    REQUIRE(after == before);
+}
+
+TEST_CASE("shuffle(), sortInOrder() and print() handle empty and one-card decks", "[deck]") {
+    SECTION("An empty deck stays empty and prints nothing") {
+        Deck empty(true, "Empty");
+        REQUIRE_NOTHROW(empty.shuffle());
+        REQUIRE_NOTHROW(empty.sortInOrder());
+        REQUIRE(empty.empty());
+
+        std::ostringstream captured;
+        std::streambuf *original = std::cout.rdbuf(captured.rdbuf());
+        empty.print();
+        std::cout.rdbuf(original);
+        REQUIRE(captured.str().empty());
+    }
+
+    SECTION("A one-card deck keeps its card") {
+        Deck source(false, "Source");
+        Deck single(true, "Single");
+        source.moveTo(single, 0);  // Ace of Hearts
+
+        single.shuffle();
+        single.sortInOrder();
+        REQUIRE(single.size() == 1);
+        REQUIRE(single.getCard(0).getName() == "Ace of Hearts");
+    }
+}

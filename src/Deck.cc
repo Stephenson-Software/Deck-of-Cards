@@ -54,9 +54,6 @@ void Deck::shuffle() {
 void Deck::sortInOrder() {
 	log("Sorting Deck '" + name + "'");
 	sort(cards.begin(), cards.end());
-	if (cards.size() > 1) {
-		cards[1] = cards[0];
-	}
 }
 
 void Deck::moveTo(Deck &dest, int sourceIndex) {

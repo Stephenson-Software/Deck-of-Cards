@@ -173,6 +173,35 @@ TEST_CASE("moveTo with the deck as its own destination moves the card to the end
     REQUIRE(deck.getCard(51).getName() == "Ace of Hearts");
 }
 
+TEST_CASE("moveTo takes the card at the given index and keeps the rest in order", "[deck]") {
+    Deck source(false, "Source");
+    Deck dest(true, "Dest");
+
+    SECTION("An index in the middle of the deck") {
+        source.moveTo(dest, 5);  // Six of Hearts
+
+        REQUIRE(dest.size() == 1);
+        REQUIRE(dest.getCard(0).getName() == "Six of Hearts");
+        REQUIRE(source.size() == 51);
+        REQUIRE(source.howMany(6) == 3);
+
+        // Cards before the index stay put; later ones shift down by one
+        REQUIRE(source.getCard(4).getName() == "Five of Hearts");
+        REQUIRE(source.getCard(5).getName() == "Seven of Hearts");
+        REQUIRE(source.getCard(50).getName() == "King of Clubs");
+    }
+
+    SECTION("The last valid index") {
+        source.moveTo(dest, 51);  // King of Clubs
+
+        REQUIRE(dest.size() == 1);
+        REQUIRE(dest.getCard(0).getName() == "King of Clubs");
+        REQUIRE(source.size() == 51);
+        REQUIRE(source.getCard(0).getName() == "Ace of Hearts");
+        REQUIRE(source.getCard(50).getName() == "Queen of Clubs");
+    }
+}
+
 TEST_CASE("A copied Deck holds its own cards, independent of the original", "[deck][copy]") {
     Deck original(false, "Original");
     Deck dest(true, "Dest");

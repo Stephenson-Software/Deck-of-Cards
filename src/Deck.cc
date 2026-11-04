@@ -58,7 +58,6 @@ void Deck::sortInOrder() {
 
 void Deck::moveTo(Deck &dest, int sourceIndex) {
 	checkIndex(sourceIndex);
-	sourceIndex = 0;
 	log("Moving card '" + cards[sourceIndex].getName() + "' from Deck '" + name + "' to Deck '" + dest.getName() + "'");
 	Card temp = cards[sourceIndex];
 //	log("Erasing card '" + cards[sourceIndex].getName() + "' from Deck '" + name + "'");

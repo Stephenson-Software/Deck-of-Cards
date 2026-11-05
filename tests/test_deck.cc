@@ -102,6 +102,47 @@ TEST_CASE("Deck shuffle", "[deck]") {
     REQUIRE(shuffled_order == original_order);
 }
 
+TEST_CASE("shuffle() reorders the whole deck", "[deck]") {
+    // A correct shuffle lands on any one given order with probability 1/52!,
+    // and the first or last card stays put in all 20 rounds with (1/52)^20,
+    // so these assertions do not flake in practice.
+    auto order = [](const Deck &deck) {
+        std::vector<std::string> names;
+        for (int i = 0; i < deck.size(); i++) {
+            names.push_back(deck.getCard(i).getName());
+        }
+        return names;
+    };
+
+    SECTION("A shuffled deck leaves the generated order") {
+        Deck unshuffled(false, "Unshuffled");
+        Deck deck(false, "Test");
+        deck.shuffle();
+        REQUIRE(order(deck) != order(unshuffled));
+    }
+
+    SECTION("Two decks shuffled in turn get different orders") {
+        Deck first(false, "First");
+        Deck second(false, "Second");
+        first.shuffle();
+        second.shuffle();
+        REQUIRE(order(first) != order(second));
+    }
+
+    SECTION("The first and last positions take part") {
+        bool firstMoved = false;
+        bool lastMoved = false;
+        for (int round = 0; round < 20; round++) {
+            Deck deck(false, "Test");
+            deck.shuffle();
+            firstMoved = firstMoved || deck.getCard(0).getName() != "Ace of Hearts";
+            lastMoved = lastMoved || deck.getCard(51).getName() != "King of Clubs";
+        }
+        CHECK(firstMoved);
+        CHECK(lastMoved);
+    }
+}
+
 TEST_CASE("Deck sorting", "[deck]") {
     Deck deck(false, "Test");
     deck.shuffle();  // Shuffle first

@@ -41,6 +41,16 @@ A named, ordered collection of `Card`s.
 - Logging — `Deck` has an internal debug logger (`src/helper/mylogger.h`) that every `Deck` turns off in its constructor, so a `Deck` writes to `std::cout` only when asked to: through `print()`, or `operator<<` given `std::cout`.
 - Copying — `Deck` uses the compiler-generated copy constructor and copy assignment. A copy gets its own cards and the same name, so moving cards out of one deck does not change the other.
 
+### `MyLogger` (`src/helper/mylogger.h`)
+
+The header-only logger that `Deck` keeps turned off. It can also be used directly:
+
+- A new `MyLogger` has debug on, ends each message with a newline, and has no program name.
+- `log(message)` / `logger(message)` — take a `const char *` or a `std::string` and, while debug is on, write `<= LOG => <program name> => <message>` to `std::cout`.
+- `setDebug(bool)` — turns writing on or off.
+- `setNewLine(bool)` — sets whether each message ends with a newline.
+- `setProgramName(const char *name)` — sets the name shown in the line.
+
 `testing/testingDeck.cc` shows these calls together: it builds a full deck, shuffles it, and deals seven cards each to two empty decks with `myDeck.moveTo(playerone, 0)` and `myDeck.moveTo(playertwo, 0)`.
 
 ## Building and Testing
@@ -102,6 +112,7 @@ The project includes a GitHub Actions CI pipeline that automatically:
 The project includes comprehensive unit tests covering:
 - Card construction, operators, and methods
 - Deck operations, shuffling, card management, and index validation
+- `MyLogger`'s output format and its debug, newline, and program-name settings
 - Error handling and edge cases
 
 ## How the screenshot was captured

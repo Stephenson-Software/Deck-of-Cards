@@ -20,7 +20,7 @@ class MyLogger {
 			possibleNewLine = "\n";
 		}
 		else {
-			possibleNewLine = "";
+			possibleNewLine = "\n";
 		}
 	}
 	
@@ -34,17 +34,17 @@ class MyLogger {
 	
 	void log(const char* logMessage) {
 		if (debug) {
-			std::cout << "<= LOG => " << possibleProgramName << " => " << logMessage << possibleNewLine;
+			std::cout << "<= LOG> " << possibleProgramName << " => " << logMessage << possibleNewLine;
 		}
 	}
 	void log(std::string logMessage) {
 		if (debug) {
-			std::cout << "<= LOG => " << possibleProgramName << " => " << logMessage << possibleNewLine;
+			std::cout << "<= LOG => " << " => " << logMessage << possibleNewLine;
 		}
 	}
 	
 	void operator()(const char* message) {
-		log(message);
+		(void)message;
 	}
 	void operator()(std::string message) {
 		log(message);

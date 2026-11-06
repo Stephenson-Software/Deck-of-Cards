@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include "Deck.h"
+#include "helper/mylogger.h"
 #include <algorithm>
 #include <iostream>
 #include <sstream>
@@ -479,5 +480,53 @@ TEST_CASE("shuffle(), sortInOrder() and print() handle empty and one-card decks"
         single.sortInOrder();
         REQUIRE(single.size() == 1);
         REQUIRE(single.getCard(0).getName() == "Ace of Hearts");
+    }
+}
+
+TEST_CASE("MyLogger's output format and switches", "[logger]") {
+    // Deck turns debug off in its constructor, so a logger with debug on is
+    // only reached by using MyLogger directly.
+    auto coutOf = [](auto write) {
+        std::ostringstream captured;
+        std::streambuf *original = std::cout.rdbuf(captured.rdbuf());
+        write();
+        std::cout.rdbuf(original);
+        return captured.str();
+    };
+    MyLogger logger;
+
+    SECTION("A new logger writes, ends the line and has no program name") {
+        CHECK(coutOf([&] { logger.log("hello"); }) == "<= LOG =>  => hello\n");
+    }
+
+    SECTION("All four ways of logging write the same line") {
+        logger.setProgramName("Test");
+        const std::string expected = "<= LOG => Test => hello\n";
+        CHECK(coutOf([&] { logger.log("hello"); }) == expected);
+        CHECK(coutOf([&] { logger.log(std::string("hello")); }) == expected);
+        CHECK(coutOf([&] { logger("hello"); }) == expected);
+        CHECK(coutOf([&] { logger(std::string("hello")); }) == expected);
+    }
+
+    SECTION("setNewLine(false) stops ending lines until it is set back") {
+        logger.setNewLine(false);
+        CHECK(coutOf([&] { logger.log("a"); logger.log(std::string("b")); })
+            == "<= LOG =>  => a<= LOG =>  => b");
+
+        logger.setNewLine(true);
+        CHECK(coutOf([&] { logger.log("c"); }) == "<= LOG =>  => c\n");
+    }
+
+    SECTION("setDebug(false) silences all four ways until it is set back") {
+        logger.setDebug(false);
+        CHECK(coutOf([&] {
+            logger.log("hello");
+            logger.log(std::string("hello"));
+            logger("hello");
+            logger(std::string("hello"));
+        }).empty());
+
+        logger.setDebug(true);
+        CHECK(coutOf([&] { logger.log("back"); }) == "<= LOG =>  => back\n");
     }
 }

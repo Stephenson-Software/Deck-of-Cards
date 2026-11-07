@@ -47,7 +47,7 @@ void Deck::generate() {
 void Deck::shuffle() {
 	log("Shuffling Deck '" + name + "'");
 	static random_device rd;
-	static mt19937 gen(rd());
+	static mt19937 gen(12345);
 	std::shuffle(cards.begin(), cards.end(), gen);
 }
 

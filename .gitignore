@@ -9,6 +9,7 @@ testing/testingDeck
 build/
 build_*/
 *.cmake
+!tests/*.cmake
 CMakeCache.txt
 CMakeFiles/
 Makefile

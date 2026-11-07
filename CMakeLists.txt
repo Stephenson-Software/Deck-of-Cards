@@ -55,11 +55,17 @@ target_link_libraries(testingDeck deck_of_cards)
 
 # Run the demo programs as smoke tests. testCard's output is deterministic, so
 # its last line is checked (no \n in the pattern: Windows writes \r\n);
-# testingDeck shuffles, so only its exit status is checked.
+# testingDeck shuffles, so its output cannot be matched and only its exit status
+# is checked here.
 add_test(NAME testCard_demo COMMAND testCard)
 set_tests_properties(testCard_demo PROPERTIES
     PASS_REGULAR_EXPRESSION "Ace of Hearts \\(rank 1\\)")
 add_test(NAME testingDeck_demo COMMAND testingDeck)
+
+# A fixed seed survives every test inside one process, so compare two runs.
+add_test(NAME testingDeck_two_runs_differ
+    COMMAND ${CMAKE_COMMAND} -DPROGRAM=$<TARGET_FILE:testingDeck>
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/two_runs_differ.cmake)
 
 # Report compiler warnings for this project's own targets only. The fetched
 # Catch2 sources are left at their defaults. Warnings are not errors.

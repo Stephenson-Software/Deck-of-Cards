@@ -4,8 +4,9 @@
 #
 # Usage: cmake -DPROGRAM=<path to testingDeck> -P two_runs_differ.cmake
 #
-# The odds of two correct shuffles matching are 1 in 52!, so this does not flake
-# in practice. A crash that prints nothing in both runs also fails here.
+# The seed is one 32-bit value, so two correct runs match about once in 4 billion
+# and this does not flake in practice. A crash that prints nothing in both runs
+# also fails here.
 
 execute_process(COMMAND "${PROGRAM}" OUTPUT_VARIABLE first)
 execute_process(COMMAND "${PROGRAM}" OUTPUT_VARIABLE second)
